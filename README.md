@@ -1,13 +1,20 @@
-Urban Drainage Data SQL Scripts
-This repository contains SQL scripts used for processing, inserting, and structuring Urban Drainage Systems (UDS) data. These queries facilitate data harmonization and integration with SensorThings API (STA) and other geospatial standards.
+# 🏗️ Urban Drainage Data SQL Scripts  
 
-1. Data Insertion Queries
-The SQL scripts in the Insert_data.sql file handle bulk data uploads and structured insertion of sensor data into a PostgreSQL/PostGIS database. These queries ensure:
+This repository contains SQL scripts for processing, inserting, and structuring **Urban Drainage Systems (UDS) data**. These queries support data harmonization and integration with **SensorThings API (STA)** and **OGC standards**, improving interoperability and analytical capabilities.  
 
-Proper data formatting and referential integrity
-Handling of sensor observations, including timestamps, locations, and observed properties
-Integration with OGC standards such as Observations & Measurements (O&M)
-Example:
+
+---
+
+## 🚀 1. Data Insertion Queries  
+
+The SQL scripts in the `Insert_data.sql` directory handle **bulk data uploads** and structured insertion of sensor data into a **PostgreSQL/PostGIS database**. These queries ensure:  
+
+✔️ Proper **data formatting** and **referential integrity**  
+✔️ Handling of **sensor observations**, including **timestamps, locations, and observed properties**  
+✔️ Integration with **OGC Observations & Measurements (O&M)**  
+
+### 🔹 Example Query: Inserting Sensor Observations  
+```sql
 INSERT INTO PUBLIC."OBSERVATIONS" (
 "PHENOMENON_TIME_START",
 "PHENOMENON_TIME_END",
@@ -28,16 +35,17 @@ SELECT
 	) AS DATASTREAM_ID,
     OV.SIGNAL_ID
 FROM DATAPOOL_REMOTE.OBSERVATION_VIEW OV
+```
 
-For full details, see Insert_data.sql.
+## 📊 2. Materialized Views for Optimized Queries
+The SQL scripts in `Materialized_views.sql` create precomputed views that improve data access efficiency. Materialized views enable:
 
-2. Materialized Views for Optimized Queries
-The SQL scripts in Materialized_views.sql create precomputed views to optimize data access and analysis. Materialized views allow for:
+✔️ Faster queries on large sensor datasets
+✔️ Aggregated time-series data for visualization
+✔️ Pre-filtered datasets for integration with Helgoland and QGIS
 
-Faster queries on large sensor datasets
-Aggregated time-series data for easier visualization
-Pre-filtered datasets for integration with Helgoland and QGIS
-Example:
+### 🔹 Example Query: Creating a Materialized View
+```sql
 CREATE MATERIALIZED VIEW datapool_clone.procedure_view
 TABLESPACE pg_default
 AS SELECT s.source_id::bigint AS source_id,
@@ -49,3 +57,4 @@ AS SELECT s.source_id::bigint AS source_id,
    FROM datapool_clone.source s
      LEFT JOIN datapool_clone.source_type st ON s.source_type_id = st.source_type_id
 WITH DATA;
+```
